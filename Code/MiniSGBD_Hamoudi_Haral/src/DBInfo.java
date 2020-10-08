@@ -2,19 +2,34 @@ package src;
 
 import java.util.Vector;
 
-public class DBInfo {
-    private static int nbRel = 0;
-    private static Vector <RelationInfo> listRels = new Vector <RelationInfo> ();
+public final class DBInfo {
+
+    private static DBInfo INSTANCE;
+    private int nbRel;
+    private Vector <RelationInfo> listRels;
+
+    private DBInfo() {
+        this.nbRel = 0;
+        this.listRels = new Vector <RelationInfo> ();
+    }
+
+    public static DBInfo getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new DBInfo();
+        }
+
+        return INSTANCE;
+    }
     
-    public static void init() {
+    public void init() {
         //ça doit faire quoi ??
     }
 
-    public static void finish() {
+    public void finish() {
         //ça doit faire quoi ??
     }
 
-    public static void addRelation(RelationInfo relation) {
+    public void addRelation(RelationInfo relation) {
         listRels.add(relation);
         nbRel++;
     }

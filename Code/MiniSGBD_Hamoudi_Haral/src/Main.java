@@ -4,25 +4,26 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-         //A quoi sert les .init() ?
+
+        DBManager.getInstance().init();
+        Scanner sc = new Scanner(System.in);
         String command = "";
-        System.out.println(args[0]);
+
         do {
             System.out.println("Entrez votre commande : ");
-            Scanner sc = new Scanner(System.in);
             command = sc.nextLine();
 
             switch (command) {
-                case "exit":
-                    sc.close(); //Ferme le flux d'entrer
-                    
-                     //Fin de l'exécution du programme
+                case "EXIT":
+                    sc.close(); //Ferme le flux d'entrer clavier
+                    DBManager.getInstance().finish(); //Fin de l'exécution du DBManager
+                    System.out.println("Arrêt du programme ! Au revoir :)");
                     break;
             
                 default:
-                    DBManager.processCommand(command);
+                    DBManager.getInstance().processCommand(command);
                     break;
             }
-        } while (true);
+        }while(!command.equals("EXIT"));
     }
 }

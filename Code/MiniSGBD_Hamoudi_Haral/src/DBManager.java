@@ -2,44 +2,60 @@ package src;
 
 import java.util.Vector;
 
-public class DBManager {
-    
+public final class DBManager {
+
+    private static DBManager INSTANCE; //Instance unique du DBManager
+
+    private DBManager() {
+
+    }
+
+    public static DBManager getInstance() { //Permet d'obtenir l'unique instance de DBManager
+        if (INSTANCE == null){
+            INSTANCE = new DBManager();
+        }
+
+        return INSTANCE;
+    }
+
     public void init() {
-        DBInfo.init();
+        DBInfo.getInstance().init();
     }
 
     public void finish() {
-        DBInfo.finish();
-
-        System.out.println("Arrêt du programme ! Au revoir :)");
-        System.exit(0);
+        DBInfo.getInstance().finish();
     }
 
-    public static void createRelation(String nomRel, int nbCol, Vector <String> nomCols, Vector <String> typeCols) {
+    private void createRelation(String nomRel, int nbCol, Vector <String> nomCols, Vector <String> typeCols) { //Crée une relation et l'insert dans la DBInfo
         RelationInfo relation = new RelationInfo(nomRel, nbCol, nomCols, typeCols);
-        DBInfo.addRelation(relation);
+        DBInfo.getInstance().addRelation(relation);
     }
 
-    public static void processCommand(String command) {
+    public void processCommand(String command) {
         String [] splitCommand = command.split(" ");
 
-        switch (splitCommand[0].toUpperCase()) {
+        switch (splitCommand[0]) {
 
-            case "CREATE": //Demander prof si c'est une bonne idée de refaire des variables locales ici
-                String nomRel = splitCommand[1]; //nom de la relation
-                int nbCol = Integer.parseInt(splitCommand[2]); //le nombre de colonnes
+            case "CREATEREL":
+                String nomRel = splitCommand[1];
+                int nbCol = 0;
                 Vector <String> nomCols = new Vector<String>();
-                Vector <String> typeCols = new Vector<String>(); //Utilisation d'un vecteur car nb arguments variables
+                Vector <String> typeCols = new Vector<String>();
 
-                for (int i = 3; i < splitCommand.length; i++) {
-                   typeCols.add(splitCommand[i]);
+                for (String string : splitCommand) { //Ajoute le nom et le type des colonnes + calcul le nb de colonnes
+                    if ((!string.equals("CREATEREL")) && (!string.equals(nomRel))) {
+                        String [] splitNomTypeCols = string.split(":");
+                        nomCols.add(splitNomTypeCols[0]);
+                        typeCols.add(splitNomTypeCols[1]);
+                        nbCol++;
+                    }
                 }
 
                 createRelation(nomRel, nbCol, nomCols, typeCols);
                 break;
                 
             default:
-                System.out.println("Mauvaise commande ! Recommencez s'il vous plait ;)");
+                System.out.println("Mauvaise commande ! Recommencez s'il vous plait");
                 break;
         }
     }
