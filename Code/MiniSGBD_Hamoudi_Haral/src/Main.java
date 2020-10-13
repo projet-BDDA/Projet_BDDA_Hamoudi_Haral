@@ -6,6 +6,10 @@ public class Main {
     public static void main(String[] args) {
 
         DBManager.getInstance().init();
+
+        DBParams.DBPath = args[0];
+        DBParams.pageSize = 4096;
+        
         Scanner sc = new Scanner(System.in);
         String command = "";
 
