@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+    
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DiskManagerTests",
+            "request": "launch",
+            "mainClass": "src.DiskManagerTests",
+            "projectName": "Projet_BDDA_Hamoudi_Haral_26d09214",
+            "args": "${command:SpecifyProgramArgs}"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "src.Main",
+            "projectName": "Projet_BDDA_Hamoudi_Haral_26d09214"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<Projet_BDDA_Hamoudi_Haral_26d09214>",
+            "request": "launch",
+            "mainClass": "src.Main",
+            "projectName": "Projet_BDDA_Hamoudi_Haral_26d09214",
+            "args": "${command:SpecifyProgramArgs}"
+        }
+    ]
+}

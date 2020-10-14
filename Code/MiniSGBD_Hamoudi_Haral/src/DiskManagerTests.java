@@ -4,6 +4,9 @@ import java.nio.ByteBuffer;
 
 public class DiskManagerTests {
     public static void main(String[] args) {
+        DBParams.DBPath = args[0];
+        DBParams.pageSize = 4096;
+        
         testCreateFile(0);
         testAddPage(0);
         testReadPage(0, null);
