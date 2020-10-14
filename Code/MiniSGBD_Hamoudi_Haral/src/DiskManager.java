@@ -9,7 +9,6 @@ import java.nio.channels.FileChannel;
 public class DiskManager {
     public static void createFile (int fileIdx) {  // crée (dans le sous-dossier DB) un fichier Data_fileIdx.rf
         String pathnameString = "./"+DBParams.DBPath+"/Data_"+fileIdx+".rf";
-        System.out.println(pathnameString);
         File inputFile = new File(pathnameString);
 
         if (!inputFile.exists()) {
@@ -22,13 +21,23 @@ public class DiskManager {
             }
             
         } 
-        else {
+        else { //Plutôt à mettre dans le readPage()
             try {
                 FileInputStream fileStream = new FileInputStream(inputFile); //Permet d'utiliser getChannel qui renvoie un canal
                 FileChannel fileChannel = fileStream.getChannel(); //Utilise un buffer pour pour lire / écrire dans un fichier bin
                 ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize); //ByteBuffer est un conteneur de taille fixe d'octets
 
+                while (fileChannel.read(buffer) > 0) {
+                    buffer.flip();
+                    while (buffer.hasRemaining()) {
+                     byte b = buffer.get();
+                     System.out.print((char) b);
+                    }
+                    buffer.clear();
+                   }
                 
+                fileChannel.close();
+                fileStream.close();;
             } catch (Exception e) {
                 e.getMessage();
             }
@@ -39,7 +48,7 @@ public class DiskManager {
         return null;
     }
 
-    public static void readPage (int pageId, ByteBuffer buff) { // remplir le buff avec le contenu disque de la page identifiée par pageID
+    public static void readPage (int pageId, ByteBuffer buff) { // remplit le buff avec le contenu disque de la page identifiée par pageID
 
     }
 
