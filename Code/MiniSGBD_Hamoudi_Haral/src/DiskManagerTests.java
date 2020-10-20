@@ -3,14 +3,14 @@ package src;
 import java.nio.ByteBuffer;
 
 public class DiskManagerTests {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         DBParams.DBPath = args[0];
         DBParams.pageSize = 4096;
         
         testCreateFile(0);
         testAddPage(0);
-        testReadPage(0, null);
-        testWritePage(0, null);
+        testReadPage(new PageId(), null);
+        testWritePage(new PageId(), null);
 
     }
 
@@ -22,11 +22,11 @@ public class DiskManagerTests {
         DiskManager.addPage(fileIdx);
     }
 
-    private static void testReadPage(int pageId, ByteBuffer buff) {
+    private static void testReadPage(PageId pageId, ByteBuffer buff) {
         DiskManager.readPage(pageId, buff);
     }
 
-    private static void testWritePage(int pageId, ByteBuffer buff) {
+    private static void testWritePage(PageId pageId, ByteBuffer buff) {
         DiskManager.writePage(pageId, buff);
     }
 }

@@ -26,11 +26,24 @@ public final class DBManager {
         DBInfo.getInstance().finish();
     }
 
-    private void createRelation(String nomRel, int nbCol, Vector <String> nomCols, Vector <String> typeCols) { //Crée une relation et l'insert dans la DBInfo
+    /**
+     * Crée une relation et l'insert dans la DBInfo
+     * 
+     * @param nomRel Nom de la relation
+     * @param nbCol Nombre de colonnes de la relation
+     * @param nomCols Nom des colonnes de la reation
+     * @param typeCols Type des colonnes de la relation
+     */
+    private void createRelation(String nomRel, int nbCol, Vector <String> nomCols, Vector <String> typeCols) {
         RelationInfo relation = new RelationInfo(nomRel, nbCol, nomCols, typeCols);
         DBInfo.getInstance().addRelation(relation);
     }
 
+    /**
+     * Gère les différentes commandes du LDD (langage de définition de données) et LMD (langage de manipulation de données)
+     * 
+     * @param command Commande de l'utilisateur
+     */
     public void processCommand(String command) {
         String [] splitCommand = command.split(" ");
 

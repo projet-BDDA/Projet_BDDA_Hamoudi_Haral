@@ -29,6 +29,11 @@ public final class DBInfo {
         //ça doit faire quoi ??
     }
 
+    /**
+     * Ajoute une relation dans la liste de relation et incrémente le nombre de relation
+     * 
+     * @param relation Relation (de type modèle relationnel)
+     */
     public void addRelation(RelationInfo relation) {
         listRels.add(relation);
         nbRel++;

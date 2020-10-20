@@ -12,4 +12,12 @@ public class PageId {
     public PageId() {
         this(0,0);
     }
+
+    public int getFileIdx() {
+        return fileIdx;
+    }
+
+    public int getPageIdx() {
+        return pageIdx;
+    }
 }
