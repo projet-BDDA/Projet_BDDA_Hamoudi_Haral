@@ -1,10 +1,9 @@
 package src;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
 public class DiskManager {
     /**
@@ -21,6 +20,7 @@ public class DiskManager {
             try {
                 inputFile.createNewFile();
             } catch (IOException e) {
+                System.out.println("Problème d'E/S sur le fichier");
                 e.printStackTrace();
             } catch (SecurityException e) {
                 e.printStackTrace();
@@ -40,7 +40,23 @@ public class DiskManager {
      * @return Retourne un PageId correspondant à la page nouvellement rajoutée
      */
     public static PageId addPage (int fileIdx) { 
-        return null;
+        ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
+        String pathnameString = "./"+DBParams.DBPath+"/Data_"+fileIdx+".rf";
+        File inputFile = new File(pathnameString);
+        int pageIdx = 0;
+
+        try {
+            RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
+
+            rFile.seek(rFile.length());
+            rFile.write(buffer.array());
+
+            pageIdx = (int) (rFile.length() / DBParams.pageSize - 1);
+            rFile.close();
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        return new PageId(fileIdx, pageIdx);
     }
 
     /**
@@ -54,6 +70,26 @@ public class DiskManager {
         File inputFile = new File(pathnameString);
 
         try {
+            RandomAccessFile rFile = new RandomAccessFile(inputFile, "r");
+
+            rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
+            rFile.read(buff.array());
+            //rFile.readFully(buff.array(), pageId.getPageIdx() * DBParams.pageSize, buff.capacity());
+
+            while (buff.hasRemaining()) {
+                byte b = buff.get();
+                System.out.print((char)b);
+               }
+            buff.clear();
+            rFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println("Le buffer est null");
+            e.printStackTrace();
+        }
+
+        /*try {
             FileInputStream fileStream = new FileInputStream(inputFile); //Permet d'utiliser getChannel qui renvoie un canal
             FileChannel fileChannel = fileStream.getChannel(); //Utilise un buffer pour lire / écrire dans un fichier bin
             ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
@@ -68,10 +104,10 @@ public class DiskManager {
                }
             
             fileChannel.close();
-            fileStream.close();;
+            fileStream.close();
         } catch (IOException e) {
-            e.printStackTrace();;
-        }
+            e.printStackTrace();
+        }*/
     }
 
     /**
@@ -81,6 +117,21 @@ public class DiskManager {
      * @param buff Un buffer
      */
     public static void writePage (PageId pageId, ByteBuffer buff)  {
+        String pathnameString = "./"+DBParams.DBPath+"/Data_"+pageId.getFileIdx()+".rf";
+        File inputFile = new File(pathnameString);
 
+        try {
+            RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
+
+            rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
+            rFile.write(buff.array());
+            buff.clear();
+            rFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println("Le buffer est null");
+            e.printStackTrace();
+        }
     }
 }
