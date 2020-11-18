@@ -8,6 +8,14 @@ public class RelationInfo {
     private Vector <String> nomCols;
     private Vector <String> typeCols; //Type restreint à "int" "float" "stringT", où T=longeur du string 
 
+    /**
+     * Crée une nouvelle relation 
+     * 
+     * @param nomRel nom de la relation
+     * @param nbCols nombre de colonne(s)
+     * @param nomCols nom de colonne(s)
+     * @param typeCols liste du type de(s) colonne(s)
+     */
     public RelationInfo(String nomRel, int nbCols,Vector <String> nomCols, Vector <String> typeCols) {
         this.nomRel=nomRel;
         this.nbCols=nbCols;

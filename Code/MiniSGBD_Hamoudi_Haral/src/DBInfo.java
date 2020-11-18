@@ -13,6 +13,11 @@ public final class DBInfo {
         this.listRels = new Vector <RelationInfo> ();
     }
 
+    /**
+     * Permet d'obtenir l'unique instance de DBInfo
+     * 
+     * @return retourne l'instance du DBInfo
+     */
     public static DBInfo getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new DBInfo();
@@ -21,10 +26,16 @@ public final class DBInfo {
         return INSTANCE;
     }
     
+    /**
+     * Initialise le DBInfo
+     */
     public void init() {
         //ça doit faire quoi ??
     }
 
+    /**
+     * Désactive le DBInfo
+     */
     public void finish() {
         //ça doit faire quoi ??
     }

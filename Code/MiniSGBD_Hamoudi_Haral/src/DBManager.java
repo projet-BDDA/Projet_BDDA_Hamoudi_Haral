@@ -10,7 +10,12 @@ public final class DBManager {
 
     }
 
-    public static DBManager getInstance() { //Permet d'obtenir l'unique instance de DBManager
+    /**
+     * Permet d'obtenir l'unique instance de DBManager
+     * 
+     * @return retourne l'instance du DBManager
+     */
+    public static DBManager getInstance() {
         if (INSTANCE == null){
             INSTANCE = new DBManager();
         }
@@ -18,10 +23,16 @@ public final class DBManager {
         return INSTANCE;
     }
 
+    /**
+     * Initialise le DBManager
+     */
     public void init() {
         DBInfo.getInstance().init();
     }
 
+    /**
+     * Désactive le DBManager
+     */
     public void finish() {
         DBInfo.getInstance().finish();
         BufferManager.getInstance().flushAll();;

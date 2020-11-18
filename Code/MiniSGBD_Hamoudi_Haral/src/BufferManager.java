@@ -9,6 +9,11 @@ public class BufferManager {
 
     }
 
+    /**
+     * Permet d'obtenir l'unique instance du BufferManager
+     * 
+     * @return retourne l'instance du BufferManager
+     */
     public static BufferManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new BufferManager();
