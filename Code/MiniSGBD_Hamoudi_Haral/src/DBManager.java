@@ -24,6 +24,7 @@ public final class DBManager {
 
     public void finish() {
         DBInfo.getInstance().finish();
+        BufferManager.getInstance().flushAll();;
     }
 
     /**

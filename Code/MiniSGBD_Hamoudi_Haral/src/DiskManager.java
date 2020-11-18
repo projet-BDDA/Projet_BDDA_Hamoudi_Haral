@@ -1,6 +1,7 @@
 package src;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -42,19 +43,24 @@ public class DiskManager {
     public static PageId addPage (int fileIdx) { 
         ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
         String pathnameString = "./"+DBParams.DBPath+"/Data_"+fileIdx+".rf";
-        File inputFile = new File(pathnameString);
         int pageIdx = 0;
 
         try {
+            File inputFile = new File(pathnameString);
             RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
 
             rFile.seek(rFile.length());
             rFile.write(buffer.array());
 
             pageIdx = (int) (rFile.length() / DBParams.pageSize - 1);
+            System.out.println(pageIdx);
             rFile.close();
-        } catch (Exception e) {
-            //TODO: handle exception
+        } catch (FileNotFoundException e) {
+            System.out.println("Le fichier n'existe pas !");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         return new PageId(fileIdx, pageIdx);
     }
@@ -74,13 +80,12 @@ public class DiskManager {
 
             rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
             rFile.read(buff.array());
-            //rFile.readFully(buff.array(), pageId.getPageIdx() * DBParams.pageSize, buff.capacity());
 
             while (buff.hasRemaining()) {
                 byte b = buff.get();
                 System.out.print((char)b);
                }
-            buff.clear();
+
             rFile.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,6 +130,7 @@ public class DiskManager {
 
             rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
             rFile.write(buff.array());
+            
             buff.clear();
             rFile.close();
         } catch (IOException e) {

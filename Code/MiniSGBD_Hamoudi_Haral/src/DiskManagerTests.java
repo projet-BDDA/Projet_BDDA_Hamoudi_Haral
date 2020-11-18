@@ -8,12 +8,15 @@ public class DiskManagerTests {
         DBParams.pageSize = 4096;
         
         ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
-        buffer.putChar('A');
 
         testCreateFile(1);
-        testAddPage(2);
-        testWritePage(new PageId(1, 1), buffer);
-        testReadPage(new PageId(1, 1), buffer);
+        testAddPage(1);
+        PageId pageId = new PageId(1, 1);
+        buffer.putInt(100);
+        testWritePage(pageId, buffer);
+        buffer.clear();
+        testReadPage(pageId, buffer);
+        
     }
 
     private static void testCreateFile(int fileIdx) {

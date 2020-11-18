@@ -9,6 +9,7 @@ public class Main {
 
         DBParams.DBPath = args[0];
         DBParams.pageSize = 4096;
+        DBParams.frameCount = 2;
         
         Scanner sc = new Scanner(System.in);
         String command = "";
