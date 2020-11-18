@@ -47,14 +47,20 @@ public class DiskManager {
 
         try {
             File inputFile = new File(pathnameString);
-            RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
+            if (inputFile.exists()) {
+                RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
 
-            rFile.seek(rFile.length());
-            rFile.write(buffer.array());
+                rFile.seek(rFile.length());
+                rFile.write(buffer.array());
 
-            pageIdx = (int) (rFile.length() / DBParams.pageSize - 1);
-            System.out.println(pageIdx);
-            rFile.close();
+                pageIdx = (int) ((rFile.length() / DBParams.pageSize) - 1);
+                System.out.println(pageIdx);
+                
+                rFile.close();
+            } else {
+                System.out.println("Le fichier n'existe pas ! Créez le au préalable");
+            }
+            
         } catch (FileNotFoundException e) {
             System.out.println("Le fichier n'existe pas !");
         } catch (IOException e) {
@@ -76,17 +82,22 @@ public class DiskManager {
         File inputFile = new File(pathnameString);
 
         try {
-            RandomAccessFile rFile = new RandomAccessFile(inputFile, "r");
+            if (inputFile.exists()) {
+                RandomAccessFile rFile = new RandomAccessFile(inputFile, "r");
 
-            rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
-            rFile.read(buff.array());
+                rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
+                rFile.read(buff.array());
 
-            while (buff.hasRemaining()) {
-                byte b = buff.get();
-                System.out.print((char)b);
-               }
+                while (buff.hasRemaining()) {
+                    byte b = buff.get();
+                    System.out.print((char)b);
+                }
 
-            rFile.close();
+                rFile.close();
+            } else {
+                System.out.println("Le fichier n'existe pas ! Créez le au préalable");
+            }
+            
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
@@ -126,13 +137,18 @@ public class DiskManager {
         File inputFile = new File(pathnameString);
 
         try {
-            RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
+            if (inputFile.exists()) {
+                RandomAccessFile rFile = new RandomAccessFile(inputFile, "rw");
 
-            rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
-            rFile.write(buff.array());
+                rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
+                rFile.write(buff.array());
+                
+                buff.clear();
+                rFile.close();
+            } else {
+                System.out.println("Le fichier n'existe pas ! Créez le au préalable");
+            }
             
-            buff.clear();
-            rFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {

@@ -8,14 +8,13 @@ public class DiskManagerTests {
         DBParams.pageSize = 4096;
         
         ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
-
         testCreateFile(1);
-        testAddPage(1);
-        PageId pageId = new PageId(1, 1);
-        buffer.putInt(100);
-        testWritePage(pageId, buffer);
+        PageId pi = testAddPage(1);
+        PageId pitest = new PageId(1,2);
+        buffer.putChar('B');
+        testWritePage(pitest, buffer);
         buffer.clear();
-        testReadPage(pageId, buffer);
+        testReadPage(pitest, buffer);
         
     }
 
@@ -23,8 +22,8 @@ public class DiskManagerTests {
         DiskManager.createFile(fileIdx);
     }
 
-    private static void testAddPage(int fileIdx) {
-        DiskManager.addPage(fileIdx);
+    private static PageId testAddPage(int fileIdx) {
+        return DiskManager.addPage(fileIdx);
     }
 
     private static void testReadPage(PageId pageId, ByteBuffer buff) {
