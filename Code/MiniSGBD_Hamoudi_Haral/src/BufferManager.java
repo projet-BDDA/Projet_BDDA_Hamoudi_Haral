@@ -5,8 +5,10 @@ import java.nio.ByteBuffer;
 public class BufferManager {
     private static BufferManager INSTANCE;
 
-    private BufferManager() {
+    private Frame [] bufferPool;
 
+    private BufferManager() {
+        bufferPool = new Frame [DBParams.frameCount];
     }
 
     /**
@@ -56,6 +58,14 @@ public class BufferManager {
      * ◦ la remise à 0 de tous les flags/informations et contenus des buffers (buffer pool « vide »)
      */
     public void flushAll() {
-
+        for (Frame frame : bufferPool) {
+            if (frame != null) {
+                if (frame.getDirty()) {
+                    DiskManager.writePage(frame.getPageId(), frame.getByteBuffer());
+                }
+    
+                frame.resetFrame();
+            }
+        }
     }
 }
