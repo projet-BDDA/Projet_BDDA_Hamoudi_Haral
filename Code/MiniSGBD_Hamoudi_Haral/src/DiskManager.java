@@ -88,11 +88,6 @@ public class DiskManager {
                 rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
                 rFile.read(buff.array());
 
-                while (buff.hasRemaining()) {
-                    byte b = buff.get();
-                    System.out.print((char)b);
-                }
-
                 rFile.close();
             } else {
                 System.out.println("Le fichier n'existe pas ! Créez le au préalable");

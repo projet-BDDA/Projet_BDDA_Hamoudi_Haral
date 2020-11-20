@@ -36,4 +36,15 @@ public class PageId {
     public int getPageIdx() {
         return pageIdx;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        PageId pageId = (PageId) obj;
+
+        if (this == pageId) {
+            return true;
+        }
+        
+        return ((this.fileIdx == pageId.fileIdx) && (this.pageIdx == pageId.pageIdx));
+    }
 }
