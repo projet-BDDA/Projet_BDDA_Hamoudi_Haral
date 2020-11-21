@@ -10,28 +10,31 @@ public class BufferManagerTests {
 
         DiskManager.createFile(1);
         ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
-        buffer.putChar('A');
+        char c = 65;
+        buffer.putChar(c);
 
         for (int i = 0; i < 5; i++) {
             DiskManager.addPage(1);
             DiskManager.writePage(new PageId(1,i), buffer);
+            c++;
+            buffer.putChar(c);
         }
 
         for (int i = 0; i < 3; i++) {
             ByteBuffer buff = BufferManager.getInstance().getPage(new PageId(1,i));
 
-            while (buff.hasRemaining()) { //Ici provoque NullPointerException car lors du retour à null ça pose pb, trouver un moyen plus propre de lire un ByteBuffer
+            while ((buff != null) && buff.hasRemaining()) { //Ici provoque NullPointerException car lors du retour à null ça pose pb, trouver un moyen plus propre de lire un ByteBuffer
                 byte b = buff.get();
                 System.out.print((char)b);
             } 
-            System.out.println();
+            //System.out.println();
         }
 
         BufferManager.getInstance().freePage(new PageId(1, 0), true);
 
         ByteBuffer buff = BufferManager.getInstance().getPage(new PageId(1,3));
 
-            while (buff.hasRemaining()) {
+            while ((buff != null) && buff.hasRemaining()) {
                 byte b = buff.get();
                 System.out.print((char)b);
             } 
