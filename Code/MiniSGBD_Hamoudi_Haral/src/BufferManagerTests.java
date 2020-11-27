@@ -23,7 +23,7 @@ public class BufferManagerTests {
         for (int i = 0; i < 3; i++) {
             ByteBuffer buff = BufferManager.getInstance().getPage(new PageId(1,i));
 
-            while ((buff != null) && buff.hasRemaining()) { //Ici provoque NullPointerException car lors du retour à null ça pose pb, trouver un moyen plus propre de lire un ByteBuffer
+            while ((buff != null) && buff.hasRemaining()) {
                 byte b = buff.get();
                 System.out.print((char)b);
             } 
@@ -37,12 +37,6 @@ public class BufferManagerTests {
             while ((buff != null) && buff.hasRemaining()) {
                 byte b = buff.get();
                 System.out.print((char)b);
-            } 
-
-        /*while (buff.hasRemaining()) {
-            byte b = buff.get();
-            System.out.print((char)b);
-        }*/
-
+            }
     }
 }

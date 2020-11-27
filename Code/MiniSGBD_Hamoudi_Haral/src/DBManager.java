@@ -1,6 +1,6 @@
 package src;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public final class DBManager {
 
@@ -46,7 +46,7 @@ public final class DBManager {
      * @param nomCols Nom des colonnes de la reation
      * @param typeCols Type des colonnes de la relation
      */
-    private void createRelation(String nomRel, int nbCol, Vector <String> nomCols, Vector <String> typeCols) {
+    private void createRelation(String nomRel, int nbCol, ArrayList <String> nomCols, ArrayList <String> typeCols) {
         RelationInfo relation = new RelationInfo(nomRel, nbCol, nomCols, typeCols);
         DBInfo.getInstance().addRelation(relation);
     }
@@ -64,8 +64,8 @@ public final class DBManager {
             case "CREATEREL":
                 String nomRel = splitCommand[1];
                 int nbCol = 0;
-                Vector <String> nomCols = new Vector<String>();
-                Vector <String> typeCols = new Vector<String>();
+                ArrayList <String> nomCols = new ArrayList<String>();
+                ArrayList <String> typeCols = new ArrayList<String>();
 
                 for (String string : splitCommand) { //Ajoute le nom et le type des colonnes + calcul le nb de colonnes
                     if ((!string.equals("CREATEREL")) && (!string.equals(nomRel))) {
