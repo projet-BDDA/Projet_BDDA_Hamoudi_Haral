@@ -4,11 +4,22 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class Record {
-    RelationInfo relInfo; //correspond à la relation à laquelle « appartient » le record
-    ArrayList<String> values;
+    private RelationInfo relInfo; //correspond à la relation à laquelle « appartient » le record
+    private ArrayList<String> values;
 
     /**
-     * Construit un tuple (record) pour une relation donnée
+     *  Construit un tuple (record) pour une relation donnée avec ses valeurs
+     * 
+     * @param relInfo relation à laquelle le tuple est rattaché
+     * @param values valeurs du record
+     */
+    public Record(RelationInfo relInfo, ArrayList<String> values) {
+        this.relInfo = relInfo;
+        this.values = values;
+    }
+
+    /**
+     * Construit un tuple (record) pour une relation donnée sans valeurs
      * 
      * @param relInfo relation à laquelle le tuple est rattaché
      */
@@ -53,7 +64,7 @@ public class Record {
                     break;
 
                 default:
-                    int sizeString = Integer.parseInt(values.get(i).substring(6)); //Retourne la taille du string
+                    int sizeString = Integer.parseInt(relInfo.getTypeCols().get(i).substring(6)); //Retourne la taille du string
 
                     /**
                      * On ajoute des espaces si la taille réelle du string est inférieur à la taille max
@@ -111,5 +122,36 @@ public class Record {
                     break;
             }
         }
+    }
+
+    /**
+     * Accesseur de la relation à laquelle est rattaché le record
+     * 
+     * @return retourne la relation
+     */
+    public RelationInfo getRelInfo() {
+        return relInfo;
+    }
+
+    /**
+     * Accesseur des valeurs du record
+     * 
+     * @return retourne la liste de valeurs du record
+     */
+    public ArrayList<String> getValues() {
+        return values;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(');
+
+        for (String valeur : values) {
+            sb.append(valeur+",");
+        }
+
+        sb.append(')');
+        return sb.toString();
     }
 }

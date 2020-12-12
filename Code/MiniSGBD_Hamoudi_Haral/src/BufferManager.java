@@ -64,9 +64,9 @@ public class BufferManager {
      * @return retourne la frame ayant le temps de unpin le plus lointain, null si toutes les frames sont en cours d'utilisation
      */
     private Frame politiqueLRU() {
-        ArrayList<Frame> listFrame = new ArrayList<>();
+        ArrayList<Frame> listFrame = new ArrayList<>(); //Frames candidates
         for (Frame frame : bufferPool) {
-            if (frame.getPinCount() == 0 && (!frame.getUnpinned().equals(null))){
+            if ((frame.getPinCount() == 0) && (!frame.getUnpinned().equals(null))){
                 listFrame.add(frame);
             }
         }
@@ -76,6 +76,8 @@ public class BufferManager {
            for (int j = 1; j < listFrame.size(); j++) {
                if (listFrame.get(i).getUnpinned().before(listFrame.get(j).getUnpinned())) {
                    leastFrame = listFrame.get(i);
+               } else {
+                   leastFrame = listFrame.get(j);
                }
            }
         }
@@ -104,19 +106,21 @@ public class BufferManager {
         Frame frame = searchFrame(pageId);
 
         if (frame != null) {
+            System.out.println("Frame non null ! déjà en mémoire FileIdx "+frame.getPageId().getFileIdx()+" PageIdx "+frame.getPageId().getPageIdx());
             frame.incrementPinCount();
             return frame.getPage();
         } else {
             frame = new Frame(pageId);
             int indiceCaseVide = caseFree();
-
+            
             if (indiceCaseVide != -1) {
+                System.out.println("Frame null mais place dans le buffer pool FileIdx "+frame.getPageId().getFileIdx()+" PageIdx "+frame.getPageId().getPageIdx());
                 frame.incrementPinCount();
                 bufferPool[indiceCaseVide] = frame;
                 return frame.getPage();
             } else {
+                System.out.println("J'applique LRU FileIdx "+frame.getPageId().getFileIdx()+" PageIdx "+frame.getPageId().getPageIdx());
                 Frame leastFrame = politiqueLRU();
-
                 if (leastFrame != null) {
                     for (int i = 0; i < bufferPool.length; i++) {
                         if (bufferPool[i].equals(leastFrame)) {
@@ -172,13 +176,31 @@ public class BufferManager {
         if (bufferPool.length > 0) {
             for (Frame frame : bufferPool) {
                 if (frame != null) {
+                    frame.savePage();
+                    /*
                     if (frame.getDirty()) {
                         DiskManager.writePage(frame.getPageId(), frame.getByteBuffer());
                     }
-        
+                    */
                     frame.resetFrame();
                 }
             }
         }
+    }
+
+    /**
+     * Réinitialise le Buffer Manager :
+     * - Réinitialise les frames
+     * - Supprime les frames
+     */
+    public void reset() {
+        
+        for (Frame frame : bufferPool) {
+            if (frame != null) {
+                frame.resetFrame();
+            }
+        }
+
+        bufferPool = new Frame [DBParams.frameCount];
     }
 }

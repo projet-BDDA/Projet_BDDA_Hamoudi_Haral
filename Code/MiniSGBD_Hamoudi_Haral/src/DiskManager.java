@@ -54,7 +54,6 @@ public class DiskManager {
                 rFile.write(buffer.array());
 
                 pageIdx = (int) ((rFile.length() / DBParams.pageSize) - 1);
-                System.out.println(pageIdx);
                 
                 rFile.close();
             } else {
@@ -86,6 +85,7 @@ public class DiskManager {
                 RandomAccessFile rFile = new RandomAccessFile(inputFile, "r");
 
                 rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
+                //buff.clear();
                 rFile.read(buff.array());
 
                 rFile.close();
@@ -94,31 +94,12 @@ public class DiskManager {
             }
             
         } catch (IOException e) {
+            System.err.println("Pb E/S sur le buffer");
             e.printStackTrace();
         } catch (NullPointerException e) {
-            System.out.println("Le buffer est null");
+            System.err.println("Le buffer est null");
             e.printStackTrace();
         }
-
-        /*try {
-            FileInputStream fileStream = new FileInputStream(inputFile); //Permet d'utiliser getChannel qui renvoie un canal
-            FileChannel fileChannel = fileStream.getChannel(); //Utilise un buffer pour lire / écrire dans un fichier bin
-            ByteBuffer buffer = ByteBuffer.allocate(DBParams.pageSize);
-
-            while (fileChannel.read(buffer) > 0) {
-                buffer.flip();
-                while (buffer.hasRemaining()) {
-                 byte b = buffer.get();
-                 System.out.print((char) b);
-                }
-                buffer.clear();
-               }
-            
-            fileChannel.close();
-            fileStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     /**
@@ -138,7 +119,6 @@ public class DiskManager {
                 rFile.seek(pageId.getPageIdx() * DBParams.pageSize);
                 rFile.write(buff.array());
                 
-                buff.clear();
                 rFile.close();
             } else {
                 System.out.println("Le fichier n'existe pas ! Créez le au préalable");

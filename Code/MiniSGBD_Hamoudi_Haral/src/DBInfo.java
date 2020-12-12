@@ -12,6 +12,11 @@ import java.util.ArrayList;
 
 public final class DBInfo implements Serializable {
 
+    /**
+     * clé de hachage SHA qui identifie de manière unique la classe DBInfo
+     */
+    private static final long serialVersionUID = 1L;
+
     private static DBInfo INSTANCE;
     private int nbRel;
     private ArrayList <RelationInfo> listRels;
@@ -72,7 +77,6 @@ public final class DBInfo implements Serializable {
         } catch (IOException e) {
 			System.err.println("Erreur d'E/S lors de l'arrêt de DBInfo");
 		}
-        //ça doit faire quoi ??
     }
 
     /**
@@ -85,11 +89,38 @@ public final class DBInfo implements Serializable {
         nbRel++;
     }
 
+    /**
+     * Getter de la liste de relations
+     * 
+     * @return retourne la liste de relations
+     */
     public ArrayList<RelationInfo> getListRels() {
         return listRels;
     }
 
+    /**
+     * Getter du nombre de relation
+     * 
+     * @return retourne le nb de relation
+     */
     public int getNbRel() {
         return nbRel;
+    }
+
+    /**
+     * Réinitialise la DBInfo :
+     * - Supprime le fichier Catalog.def et tous les fichiers .rf
+     * - Supprime toutes les relations
+     */
+    public void reset() {
+        String pathnameString = "./DB/";
+        File file = new File(pathnameString);
+
+        for (File f : file.listFiles()) {
+            f.delete();
+        }
+
+        nbRel = 0;
+        listRels = new ArrayList <RelationInfo> ();
     }
 }
